@@ -31,7 +31,8 @@ class wifi_map(object):
         rospy.init_node('wifi_obs_server_no_map')
         self.obs_response = None
         self.epoch = int(time.time())
-        self.filename = "/home/murat/ros-deep-localization/src/wifi_observation/maps/txt/" + str(self.epoch) + ".txt"
+        self.foldername = rospy.get_param("/db_folder")
+        self.filename = self.foldername + str(self.epoch) + ".txt"
         self.r = rospy.Rate(100)
         self.id = None
         try:
@@ -39,8 +40,6 @@ class wifi_map(object):
         except Exception as e:
             print "File couldn't opened"
             open(self.filename, "w+")
-
-
 
 
         rospy.loginfo("Ready to acquire wifi observations")

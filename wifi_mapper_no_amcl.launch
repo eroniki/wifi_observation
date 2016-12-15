@@ -20,7 +20,7 @@
     <arg name="x" default="27.889" />
     <arg name="y" default="-0.06" />
   </include> -->
-
+  <param name="/db_folder" type="str" value="/home/murat/wifi_localization/measurements/wifi/" />
   <node pkg="wifi_observation" type="get_observation.py" name="get_wifi_observation" output="screen" />
   <node pkg="wifi_observation" type="wifi_mapper_no_amcl.py" name="mapper" output="screen" />
   <!-- <node pkg="wifi_observation" type="wifi_hmi.py" name="hmi" output="screen" /> -->

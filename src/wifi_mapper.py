@@ -29,6 +29,7 @@ class wifi_map(object):
     def __init__(self):
         super(wifi_map, self).__init__()
         rospy.init_node('wifi_obs_server')
+        self.foldername = rospy.get_param("/db_folder")
         self.s = rospy.Service('/signal_map', SignalMapArrayService, self.handle_signal_map)
         self.poseSubscriber = rospy.Subscriber("/amcl_pose", PoseWithCovarianceStamped, self.location_callback)
         self.mapSubscriber = rospy.Subscriber("/save_signal_maps", Empty, self.map_callback)
@@ -39,12 +40,12 @@ class wifi_map(object):
         self.std = [3,3]
         self.spatial_resolution = [1,1]
         self.epoch = int(time.time())
-        self.filename = "/home/murat/deep_ws/src/wifi_observation/maps/txt/" + str(self.epoch) + ".txt"
+        self.filename = self.foldername + str(self.epoch) + ".txt"
 
-        open(self.filename, "w")
-
+        # open(self.filename, "w")
+        print self.filename
         rospy.loginfo("Ready to acquire the map, location and wifi observations")
-        rospy.spin()
+        # rospy.spin()
 
     def location_callback(self, data):
         ### TODO: Mutex lock might be required here! ###
