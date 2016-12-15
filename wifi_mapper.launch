@@ -1,0 +1,33 @@
+<launch>
+  <!-- <include file="$(find fetch_gazebo)/launch/playground.launch" /> -->
+  <!-- <include file="$(find fetch_gazebo_demo)/launch/fetch_nav.launch" /> -->
+  <!-- <arg name="robot" default="fetch"/>
+  <arg name="debug" default="false"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/> -->
+
+  <!-- Start Gazebo with a blank world -->
+  <!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include> -->
+
+  <!-- Oh, you wanted a robot? -->
+  <!-- <include file="$(find fetch_gazebo)/launch/include/$(arg robot).launch.xml">
+    <arg name="x" default="27.889" />
+    <arg name="y" default="-0.06" />
+  </include> -->
+
+  <include file="$(find fetch_navigation)/launch/fetch_nav.launch">
+    <arg name="map_file" value="/home/murat/rand_basement.yaml"/>
+  </include>
+
+
+  <node pkg="wifi_observation" type="get_observation.py" name="get_wifi_observation" output="screen" />
+  <node pkg="wifi_observation" type="wifi_mapper.py" name="mapper" output="screen" />
+  <!-- <node pkg="wifi_observation" type="wifi_hmi.py" name="hmi" output="screen" /> -->
+  <!-- <node pkg="rviz" type="rviz" name="rviz" output="screen" /> -->
+</launch>
