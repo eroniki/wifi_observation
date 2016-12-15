@@ -133,7 +133,6 @@ catkin_package(
 
 ## Declare a C++ executable
 # add_executable(wifi_observation_node src/wifi_observation_node.cpp)
-add_executable(war_drive src/war_drive.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -143,7 +142,6 @@ add_executable(war_drive src/war_drive.cpp)
 # target_link_libraries(wifi_observation_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(war_drive ${catkin_LIBRARIES})
 
 #############
 ## Install ##
