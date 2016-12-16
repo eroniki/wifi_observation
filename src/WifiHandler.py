@@ -11,7 +11,6 @@ class WifiHandler(object):
     def query(self):
         try:
             self.response = subprocess.check_output(["iw", "dev", "wlan0", "scan"])
-            # self.response = subprocess.check_output(["whoami"])
         except subprocess.CalledProcessError:
             print "No access to WiFi card, try running the script with sudo priviligies."
         return self.response
