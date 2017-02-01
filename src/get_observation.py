@@ -6,6 +6,7 @@ import thread
 # import FileHandler
 import WifiHandler
 import TextParser
+import SerialHandler as sh
 
 from wifi_observation.srv import WifiArrayService
 from wifi_observation.srv import WifiArrayServiceResponse
@@ -16,7 +17,7 @@ from std_msgs.msg import Int64
 
 import rospy
 
-class wifi_obs(object):
+class wifi_obs2(object):
     """docstring for wifi_obs"""
     def __init__(self):
         super(wifi_obs, self).__init__()
@@ -55,6 +56,62 @@ class wifi_obs(object):
         self.APList = self.text_parser.APList
         # self.text_parser.printAPList()
         return self.construct_response()
+
+class wifi_obs(object):
+    """docstring for wifi_obs."""
+    def __init__(self):
+        super(wifi_obs, self).__init__()
+        rospy.init_node('wifi_obs_server')
+        self.s = rospy.Service('wifi_observation', WifiArrayService, self.handle_wifi_obs)
+        self.serialHandle = sh.ESP32Scanner()
+        self.get_params()
+
+        if self.serialHandle.init_port(self.port, self.baud)>=0:
+            rospy.loginfo("Ready to send wifi observations")
+            rospy.spin()
+        else:
+            rospy.logerr("Could NOT initialize the serial port, WiFi scanning is exiting")
+
+    def get_params(self):
+        self.port = rospy.get_param("/port")
+        self.baud = rospy.get_param("/baud")
+
+    def handle_wifi_obs(self, data):
+        rospy.loginfo("Service request captured")
+        text = self.serialHandle.read_line()
+        qq = self.serialHandle.parse_line(text)
+        qq = self.serialHandle.trim_list(qq)
+        qq = self.serialHandle.init_AP_obj(qq)
+        return self.construct_response(qq)
+
+    def construct_response(self, ls):
+        response = WifiArrayServiceResponse()
+        if(len(ls)==1):
+            response.success = False
+            response.message = "Error!"
+            return response
+
+        obsList = list()
+        header = Header()
+        header.stamp = rospy.get_rostime()
+
+        for i in range(len(ls)):
+            obs = WifiMessage()
+            obs.header = header
+            obs.ssid = ls[i][0]
+            obs.rss = int(ls[i][1])
+            obs.mac = ls[i][2]
+            obsList.append(obs)
+
+        if(len(ls)>1):
+            response.success = True
+            response.message = "Success!"
+            response.observations = obsList
+        else:
+            response.success = False
+            response.message = "Error!"
+
+        return response
 
 if __name__ == "__main__":
     wifi_obs = wifi_obs()
