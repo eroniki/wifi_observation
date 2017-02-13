@@ -73,8 +73,8 @@ class wifi_obs(object):
             rospy.logerr("Could NOT initialize the serial port, WiFi scanning is exiting")
 
     def get_params(self):
-        self.port = rospy.get_param("/port")
-        self.baud = rospy.get_param("/baud")
+        self.port = rospy.get_param("/port_wifi")
+        self.baud = rospy.get_param("/baud_wifi")
 
     def handle_wifi_obs(self, data):
         rospy.loginfo("Service request captured")
