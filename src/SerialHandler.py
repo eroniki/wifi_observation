@@ -46,11 +46,10 @@ class ESP32Scanner(object):
             ls.pop(0)
         return ls
 
-
     def signal_handler(self, signal, frame):
-            print('You pressed Ctrl+C!')
-            self.ser.close()
-            sys.exit(0)
+        print('You pressed Ctrl+C!')
+        self.ser.close()
+        sys.exit(0)
 
 if __name__ == "__main__":
     pass
